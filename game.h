@@ -1,3 +1,6 @@
+#ifndef GAME_H
+#define GAME_H
+
 struct player {
 	int life;
 	int strength;
@@ -6,14 +9,17 @@ struct player {
 };
 
 struct item {
-	char* name;
+	const char* name;
 	int weight;
 	int power;	
-};
+} 	const Weapons[] = { {"Sword", 5, 2}, {"Club", 5, 4}, {"Dagger", 2, 2}, {"Longsword", 10, 7}  },
+	
+	Potions[] = { {"SmallHealth", 0, 5}, {"BigHealth", 0, 10}, {"StrengthBoost", 0, 3}, {"SuperStrengthBoost", 0, 5} };
+
 
 struct enemy {
 	char* name;
-	int life;
+	int life; 
 	int power;
 };
 
@@ -29,8 +35,7 @@ enum roomtypes {
 	fld = 2 // flooded room (water)
 };
 
-struct room mkroom();
-void log(const char*); // log info (TODO)
+//void log(const char*); // log info (TODO)
 void heal(int, int); // increase life 
 void damage(int, int); // decrease life
 void devstr(int, int); // increase strength
@@ -42,3 +47,11 @@ struct item additm(struct item, char*, int, int); // declare item
 int check_for_savefile(); // check
 void create_savefile(int, int, int); // create a game file to read from for next visit
 void read_savefile(); // reading savefile after it was created
+
+/* movements */
+void move_up();
+void move_down();
+void move_left();
+void move_right();
+
+#endif /* game.h */
