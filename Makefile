@@ -14,3 +14,4 @@ game.o: game.c game.h
 
 clean:
 	rm *.o dunquest
+

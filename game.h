@@ -6,16 +6,14 @@ struct player {
 	int strength;
 	int maxweight;
 	
-};
+} pl;
 
 struct item {
 	const char* name;
 	int weight;
 	int power;	
-} 	const Weapons[] = { {"Sword", 5, 2}, {"Club", 5, 4}, {"Dagger", 2, 2}, {"Longsword", 10, 7}  },
-	
-	Potions[] = { {"SmallHealth", 0, 5}, {"BigHealth", 0, 10}, {"StrengthBoost", 0, 3}, {"SuperStrengthBoost", 0, 5} };
-
+} static Weapons[] = { {"Sword", 5, 5}, {"Longsword", 7, 7}, {"Dagger", 3, 2}, {"Fist", 0, 1}, {"Club", 5, 6}, {"SpikedClub", 5, 7} },
+	 Potions[] = { {"SmallHealth", 0, 5}};
 
 struct enemy {
 	char* name;
@@ -28,6 +26,7 @@ struct room {
 	int x;
 	int y;
 	int type; // gonna be an enum
+	
 };
 
 enum roomtypes {

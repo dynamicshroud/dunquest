@@ -5,7 +5,8 @@ void loop();
 
 void loop(){
 
-	printf("%s", Weapons[0].name);
+	printf("if it compiles we are o-k\n");
+	printf("%d", Weapons[1].weight);
 }
 
 int main(){
