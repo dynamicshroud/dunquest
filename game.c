@@ -24,22 +24,6 @@ void dmgenm(int life, int amount){
 	life = life - amount;
 }
 
-int check_for_savefile(){
-	if(access("savefile", F_OK) != -1){
-		return 1;
-	} else {
-		return 0;
-	}
-}
-
-void create_savefile(int life, int strength, int maxweight){
-	FILE *f = fopen("savefile", "w");
-	fprintf(f, "%i\n", life);
-	fprintf(f, "%i\n", strength);
-	fprintf(f, "%i\n", maxweight);
-	fclose(f);
-}
-
 void log(const char* info){
 	puts(info);
 }
@@ -79,11 +63,25 @@ struct room gen_room(){
 
 }
 
-int iscollide(int x, int y){
+int iscollide(int wx, int wy int x, int y){
 	// find position of player through parameters
 	// and detect if coords are equal to wall. if
 	// so, then return 1. if not, return 0.
 	
-	// TODO
+	
+	if(x == wx){
+		x = x - 1;
+		return 1;
+	}
+	if(y == wy){
+		y = y - 1;
+		return 1;
+	}
+	if((x == wx) && (y == wy)){
+		x = x - 1;
+		y = y - 1;
+		return 1;
+	}
+	
 	return 0;
 }
