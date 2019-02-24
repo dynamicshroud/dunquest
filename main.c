@@ -1,14 +1,20 @@
 #include <stdio.h>
 #include "game.h"
 
-void loop();
-
 void loop(){
-
-	printf("if it compiles we are o-k\n");
-	printf("%d", Weapons[1].weight);
+	struct room r = gen_room();
+	
+	do {
+		int c = getchar();
+		parse(c, r);
+		int i = iscollide(r.ox, r.oy, pl.x, pl.y);
+		printf("%d", i);
+	} while(1);
 }
 
 int main(){
+	
 	loop();
+	
+	return 0;
 }

@@ -5,8 +5,10 @@ struct player {
 	int life;
 	int strength;
 	int maxweight;
-	
-} pl;
+	int x;
+	int y;
+} static pl = {30, 0, 20, 2, 2}; // default player count
+
 
 struct item {
 	const char* name;
@@ -19,38 +21,31 @@ struct enemy {
 	char* name;
 	int life; 
 	int power;
-};
+} static Enemies[] = { {"Orc", 10, 5}, {"Troll", 7, 3} };
 
-
+/* 
+ * TODO: find a way to generate a room that you can control
+ * TODO: find a way to generate a dungeon that has rooms in it
+ * TODO: get sleep
+ * TODO: random number generators for item generator!!!!
+ */
 struct room {
-	int x;
-	int y;
-	int type; // gonna be an enum
-	
+	int ix; // flooring
+	int iy; 
+	int ox; // walls
+	int oy;	
 };
 
-enum roomtypes {
-	std = 0, // normal room
-	fld = 2 // flooded room (water)
-};
-
-//void log(const char*); // log info (TODO)
+/* functions !!! */
 void heal(int, int); // increase life 
 void damage(int, int); // decrease life
 void devstr(int, int); // increase strength
 void decstr(int, int); // decrease strength
-void dmgenm(int, int); // damage enemy
-struct item additm(struct item, char*, int, int); // declare item
+void equip(); // equip item from Weapons[]
+/* room stuff */
+struct room gen_room();
+int iscollide(int, int, int, int);
 
-/* savefile stuff */
-int check_for_savefile(); // check
-void create_savefile(int, int, int); // create a game file to read from for next visit
-void read_savefile(); // reading savefile after it was created
-
-/* movements */
-void move_up();
-void move_down();
-void move_left();
-void move_right();
-
+/* input */
+void parse(int, struct room); // TODO
 #endif /* game.h */
