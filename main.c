@@ -6,9 +6,7 @@ void loop(){
 	
 	do {
 		int c = getchar();
-		parse(c, r);
-		int i = iscollide(r.ox, r.oy, pl.x, pl.y);
-		printf("%d", i);
+		parse(c, r);	
 	} while(1);
 }
 
