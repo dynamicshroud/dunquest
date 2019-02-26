@@ -44,7 +44,7 @@ void decstr(int, int); // decrease strength
 void equip(); // equip item from Weapons[]
 /* room stuff */
 struct room gen_room();
-int iscollide(int, int, int, int);
+int iscollide(int, int);
 
 /* input */
 void parse(int, struct room); // TODO
