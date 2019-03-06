@@ -24,9 +24,8 @@ void decstr(int str, int amount){
 void equip(){
 	// TODO
 }
-struct room gen_room(){
-	/* rooms will always be rectangular to avoid more work :/ */
-	
+
+struct room gen_room(){ 
 	
 	time_t seed;
         srand((unsigned)time(&seed));
@@ -35,15 +34,19 @@ struct room gen_room(){
         int ry = rand() % 13;
         
         int addup = rand() % 7;
-
+        
         if(rx < 2) { rx = rx + addup; }
         if(ry < 2) { ry = ry + addup; }
 
-	struct room r = {rx, ry, rx+2, ry+2};
+        int dx = rx + rand() / (RAND_MAX / (rx+2 - rx + 1) + 1);
+        int dy = ry + rand() / (RAND_MAX / (ry+2 - ry + 2) + 1);
+        
+	struct room r = {rx /*inner x*/, ry /*inner y*/, rx+2 /*outer x*/, ry+2 /*outer y*/, dx /*door x*/, dy /*door y*/};
+	
 	return r;
 	
-
 }
+
 
 /* this just returns an int bool (0, 1) */
 int iscollide(int i, int c){
@@ -68,32 +71,52 @@ void parse(int input, struct room r){
                 if(input == 115){ pl.y--; printf("y: %d\n", pl.y); } // s
                 if(input == 100){ pl.x++; printf("x: %d\n", pl.x); } // d
                 
-                
                 /* basic commands */
                 if(input == 99) { // c
-                        printf("LIFE %d\n", pl.life);
-                        printf("STR %d\n", pl.strength);
+                        printf("LIFE %d | ", pl.life);
+                        printf("STR %d | ", pl.strength);
                         printf("MAXW %d\n", pl.maxweight);
-                        printf("X %d\n", pl.x);
-                        printf("Y %d\n", pl.y);
-                        printf("WX %d\n", r.ox);
-                        printf("WY %d\n", r.oy);
-                        printf("CX %d\n", cx);
+                        printf("X %d | ", pl.x);
+                        printf("Y %d | ", pl.y);
+                        printf("WX %d | ", r.ox);
+                        printf("WY %d | ", r.oy);
+                        printf("CX %d | ", cx);
                         printf("CY %d\n", cy);
+                        printf("DX %d | ", r.dx);
+                        printf("DY %d\n", r.dy);
                 }
-        /* this'll also detect IC then lower its value until IC = 0*/
+                
+                // TODO: DEVELOP A DOOR SYSTEM BUT DONT GET RID OF COLLISION
+                if(pl.x < 2){
+                        do {
+                                pl.x++;
+                        } while(pl.x < 2);
+                }
+                
+                if(pl.y < 2){
+                        do {
+                                pl.y++;
+                        } while(pl.y < 2);
+                }
+                
+                if((pl.x == r.dx) && (pl.y == r.dx)){
+                        r = gen_room();
+                }
+                
                 if(cx == 1){
                         do {
                                 cx = iscollide(r.ix, pl.x);
                                 pl.x--;
                         } while(cx == 1);
                 }
+                
                 if(cy == 1){
                         do {
                                 cy = iscollide(r.iy, pl.y);
                                 pl.y--;
-                        } while(cx == 1);
+                        } while(cy == 1);
                 }
+                
         /*
          * TODO: Get this function to parse commands that can move the
          * TODO: Get this function to parse commands that can use items

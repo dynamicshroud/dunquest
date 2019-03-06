@@ -33,7 +33,9 @@ struct room {
 	int ix; // flooring
 	int iy; 
 	int ox; // walls
-	int oy;	
+	int oy;
+	int dx; // door location
+	int dy;	
 };
 
 /* functions !!! */
@@ -45,7 +47,7 @@ void equip(); // equip item from Weapons[]
 /* room stuff */
 struct room gen_room();
 int iscollide(int, int);
-
+void room_routine(); // this'll be used to constantly edit the room variable whenever the player uses a door
 /* input */
 void parse(int, struct room); // TODO
 #endif /* game.h */
