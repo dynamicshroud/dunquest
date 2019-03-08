@@ -30,13 +30,11 @@ struct enemy {
  * TODO: random number generators for item generator!!!!
  */
 struct room {
-	int ix; // flooring
-	int iy; 
-	int ox; // walls
-	int oy;
+	int x; // 2d coords
+	int y; 
 	int dx; // door location
 	int dy;	
-};
+} static Defaults[] = { {22, 7, 0, 0}, {14, 12, 0, 0}, {14, 9, 0, 0}, {19, 8, 0, 0}, {14, 9, 0, 0} }; // these defaults will be randomly selected when calling gen_room() also TODO
 
 /* functions !!! */
 void heal(int, int); // increase life 
@@ -49,5 +47,5 @@ struct room gen_room();
 int iscollide(int, int);
 void room_routine(); // this'll be used to constantly edit the room variable whenever the player uses a door
 /* input */
-void parse(int, struct room); // TODO
+void parse(int); // TODO
 #endif /* game.h */
