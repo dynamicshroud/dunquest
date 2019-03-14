@@ -18,16 +18,21 @@ void devstr(int str, int amount){
 }
 
 void decstr(int str, int amount){
-	str = str -  amount;
+	str = str - amount;
 }
 
-void equip(){
-	// TODO
-}
-
+void equip(struct player pl, struct item i){
+	if(i.ispotion == 1){
+		pl.life += i.power;
+	}
+	if(i.ispotion == 0){
+		pl.strength += i.power;
+		pl.maxweight -= i.weight;
+	}
+}	
 struct room gen_room(){ 
 	
-	time_t seed;
+		time_t seed;
         srand((unsigned)time(&seed));
         
         int choice = rand() % 4; // 5 room selections
@@ -60,14 +65,14 @@ struct room gen_room(){
         * dx = ? (0 to x) and dy = 1 ( down side )
         */
         switch(dchoice){
-                case 0: // right
+                case 0:
                         dx = x + 2;
                         dy = rand() % y+2;
                         if(dy <= 0){
                                 dy += 2;
                         }
                         break;
-                case 1: // up
+                case 1:
                         dx = rand() % x+2;
                         dy = y+2;
                         if(dx <= 0){
@@ -90,12 +95,35 @@ struct room gen_room(){
                         break;
         }
         
-        struct room r = {x, y, dx, dy};                 
+		// items 
+		int items = rand() % 7; // 8 item choices
+	    
+	    int ix = rand() % x;
+	    int iy = rand() % y;
+	    
+	    if(ix == 0){
+			if(!(iy == 0)){
+				iy = 0;
+			}
+		}
+		if(iy == 0){
+			if(!(ix == 0)){
+				ix = 0;
+			}
+		}
+		int ispotion = 0;
+		
+		if(items > 6){
+			ispotion = 1;
+		}
+		struct item genitem = {Items[items].name, Items[items].weight, Items[items].power, ispotion};
+		
+        struct room r = {x, y, dx, dy, genitem, ix, iy};                 
         return r;
 	
 }
 
-/* this just returns an int bool (0, 1) */
+/* returns an int bool (0, 1) */
 int iscollide(int i, int c){
 	// find position of player through parameters
 	// and detect if coords are equal to wall. if
@@ -110,6 +138,10 @@ int iscollide(int i, int c){
 
 /* returns an int bool (0, 1) */
 int isdoor(int x, int y, int dx, int dy){
+        // find position of player through parameters
+        // and detect if coords are equal to door. if
+        // so, then return 1. if not, return 0.
+        
         if((dx == x) && (dy == y)){
                 return 1;
         } else {
@@ -117,6 +149,18 @@ int isdoor(int x, int y, int dx, int dy){
         }
 }
 
+/* returns an int bool (0, 1) */
+int isitem(int x, int y, int ix, int iy){
+        // find position of player through parameters
+        // and detect if coords are equal to item. if
+        // so, then return 1. if not, return 0.
+        
+        if((x == ix) && (y == iy)){
+                return 1;
+        } else {
+                return 0;
+        }
+}
 void parse(int input){
 		
 		struct room r = gen_room();
@@ -129,15 +173,35 @@ void parse(int input){
                 
                 /* basic commands */
                 if(input == 99) { // c
+						// std stuff
                         printf("LIFE %d | ", pl.life);
                         printf("STR %d | ", pl.strength);
                         printf("MAXW %d\n", pl.maxweight);
+                        // player position
                         printf("X %d | ", pl.x);
                         printf("Y %d | ", pl.y);
+                        // size of room
                         printf("WX %d | ", r.x+2);
                         printf("WY %d | ", r.y+2);
+                        // door location
                         printf("DX %d | ", r.dx);
                         printf("DY %d\n", r.dy);
+                        // item location
+                        printf("IX %d | ", r.ix);
+                        printf("IY %d\n", r.iy);
+                        // item information
+                        if((r.ix == 0) && (r.iy == 0)){
+							printf("No Items\n");
+						} else {
+							printf("Item name: %s | ", r.genitem.name);
+							printf("Item weight: %d | ", r.genitem.weight);
+							printf("Item power: %d | ", r.genitem.power);
+							if(r.genitem.ispotion == 0){
+								printf("Item is not a potion\n");
+							} else {
+								printf("Item is a potion\n");
+							}
+						}
                 }
                 
                 // TODO: DEVELOP A DOOR SYSTEM BUT DONT GET RID OF COLLISION
@@ -155,7 +219,7 @@ void parse(int input){
                 int cx = iscollide(r.x, pl.x);
                 int cy = iscollide(r.y, pl.y);
                 int dc = isdoor(pl.x, pl.y, r.x, r.y);
-                
+                int ic = isitem(pl.x, pl.y, r.ix, r.iy);
                 if(cx == 1){
                         do {
                                 cx = iscollide(r.x, pl.x);
@@ -172,11 +236,15 @@ void parse(int input){
                 
                 if((cx == 1) || (cy == 1)){
                          if(dc == 1){
+                                 printf("you entered a new room!\n");
                                  r = gen_room(); // trying to generate new room
                          }       
                 }
+                if(ic == 1){
+					equip(pl, r.genitem);
+				}
+		}
         /*
          * TODO: Get this function to parse commands that can move the
          * TODO: Get this function to parse commands that can use items
          */
-}
