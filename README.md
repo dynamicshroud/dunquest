@@ -1,3 +1,5 @@
+# WARNING
+***THIS REPO ISNT BEING SUPPORTED ANYMORE PLEASE VISIT [THIS LINK](http://gitlab.com/virtualsuckslol/dunquest) BELOW TO VIEW THE CURRENT PROGRESS***
 # Dunquest
 
 A rogue-like game built in C
